@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Saga de Películas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #000000;
+    color: #ffffff;
+    margin: 0;
+    padding: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas */
+    gap: 10px; /* Espacio entre las películas */
+}
+
+.movie {
+    text-align: center;
+}
+
+.movie img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.movie:hover img {
+    transform: scale(1.05);
+}
+
+.movie h3 {
+    font-size: 14px;
+    margin: 8px 0;
+    color: #ffcc00;
+}
+
+/* Estilos del modal de la saga */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content-saga {
+    background-color: #000000; /* Fondo de la saga en color amarillo */
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    color: #000000;
+    text-align: center;
+    position: relative;
+}
+
+.modal-content-saga img {
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    border-radius: 8px;
+    margin: 15px;
+    cursor: pointer;
+}
+
+.modal-content-saga h3 {
+    color: #000000;
+}
+
+.modal-content-saga p {
+    margin: 10px 0;
+    color: #333333;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.modal-content-saga p i {
+    margin-right: 8px;
+    color: #000000;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    color: #ffffff; /* Cambié el color del "X" a blanco */
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #ffcc00;
+}
+
+.button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #ff0000;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #ff0000;
+}
+
+/* Estilos del modal individual de la película */
+.modal-content-movie {
+    background-color: #1c1c1c; /* Fondo de la película en color oscuro */
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    color: #ffffff;
+    text-align: center;
+    position: relative; /* Añadido para que el "X" quede dentro del modal */
+}
+
+.modal-content-movie img {
+    width: 40%;
+    height: auto;
+    max-width: 200px;
+    border-radius: 8px;
+    margin: 15px;
+    cursor: pointer;
+}
+
+.modal-content-movie h3 {
+    color: #ffffff;
+}
+
+.modal-content-movie p {
+    margin: 10px 0;
+    color: #b0b0b0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.modal-content-movie p i {
+    margin-right: 8px;
+    color: #ffffff;
+}
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center; color: #ffffff;">Saga de Películas</h1>
+
+<div class="grid">
+    <!-- SAGA - INTENSAMENTE -->
+<div class="movie" onclick="openModal('modalInsideOutSaga')">
+    <img src="https://image.tmdb.org/t/p/original/Apr19lGxP7gm6y2HQX0kqOXTtqC.jpg" alt="SAGA - INTENSAMENTE">
+    <h3></h3>
+</div>
+<!-- SAGA - ANGRY BIRDS -->
+<div class="movie" onclick="openModal('modalAngryBirdsSaga')">
+    <img src="https://image.tmdb.org/t/p/original/gfgmmc5bfNrBTCh6ZVzuxVeGsjb.jpg" alt="SAGA - ANGRY BIRDS">
+    <h3></h3>
+</div>
+<!-- SAGA - LA VIDA SECRETA DE TUS MASCOTAS -->
+<div class="movie" onclick="openModal('modalVidaSecretaMascotasSaga')">
+    <img src="https://image.tmdb.org/t/p/original/t6QJ4IsCpAsxeFFxyrmQjES3DuI.jpg" alt="SAGA - LA VIDA SECRETA DE TUS MASCOTAS">
+    <h3></h3>
+</div>
+<!-- SAGA - ROMPE RALPH -->
+<div class="movie" onclick="openModal('modalRompeRalphSaga')">
+    <img src="https://image.tmdb.org/t/p/original/bhfxa6U5Ud3Vk507YgY9nYes9c0.jpg" alt="SAGA - ROMPE RALPH">
+    <h3></h3>
+</div>
+<!-- SAGA - CARS -->
+<div class="movie" onclick="openModal('modalCarsSaga')">
+    <img src="https://image.tmdb.org/t/p/original/9BOYKWwKkcO8wQ8zfHZHqlShvTU.jpg" alt="SAGA - CARS">
+    <h3></h3>
+</div>
+<!-- SAGA - BUSCANDO A NEMO -->
+<div class="movie" onclick="openModal('modalFindingNemoSaga')">
+    <img src="https://image.tmdb.org/t/p/original/wtie42vgM6OY1OGmrtT4kupQBBP.jpg" alt="SAGA - BUSCANDO A NEMO">
+    <h3></h3>
+</div>
+<!-- SAGA - MI VILLANO FAVORITO -->
+<div class="movie" onclick="openModal('modalDespicableMeSaga')">
+    <img src="https://image.tmdb.org/t/p/original/anN6OtIlsrJJGKbrKYGsByC6OH5.jpg" alt="SAGA - MI VILLANO FAVORITO">
+    <h3></h3>
+</div>
+<!-- SAGA - TROLLS -->
+<div class="movie" onclick="openModal('modalTrollsSaga')">
+    <img src="https://image.tmdb.org/t/p/original/3z2K8BYLnau2JnMQ7r9YOXSOMP9.jpg" alt="SAGA - TROLLS">
+    <h3></h3>
+</div>
+<!-- SAGA - LOS INCREÍBLES -->
+<div class="movie" onclick="openModal('modalLosIncreiblesSaga')">
+    <img src="https://image.tmdb.org/t/p/original/l7GqbzkJwowYRIXAtUz2iCPi64a.jpg" alt="SAGA - LOS INCREÍBLES">
+    <h3></h3>
+</div>
+<!-- SAGA - LA LEGO PELÍCULA -->
+<div class="movie" onclick="openModal('modalLaLegoPeliculaSaga')">
+    <img src="https://image.tmdb.org/t/p/original/ak0ySxMen13Vvp7A5Am7TFNrV3n.jpg" alt="SAGA - LA LEGO PELÍCULA">
+    <h3></h3>
+</div>
+<!-- SAGA - LOS CROODS -->
+<div class="movie" onclick="openModal('modalLosCroodsSaga')">
+    <img src="https://image.tmdb.org/t/p/original/56Dkztdng1HL4T3RHTt1zm3gFmE.jpg" alt="SAGA - LOS CROODS">
+    <h3></h3>
+</div>
+<!-- SAGA - AVIONES -->
+<div class="movie" onclick="openModal('modalAvionesSaga')">
+    <img src="https://image.tmdb.org/t/p/original/9iPjXft2km9DxlX4vGTqqP81STr.jpg" alt="SAGA - AVIONES">
+    <h3></h3>
+</div>
+
+
+<!-- AQUI VAN TODOS LOS MODALES DE CADA SAGA -->
+
+<!-- Modal de la SAGA Intensamente -->
+<div id="modalInsideOutSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalInsideOutSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieInsideOut2015')">
+                <img src="https://image.tmdb.org/t/p/original/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg" alt="Intensamente">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieInsideOut2')">
+                <img src="https://image.tmdb.org/t/p/original/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg" alt="Intensamente 2">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Angry Birds -->
+<div id="modalAngryBirdsSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalAngryBirdsSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieAngryBirds2016')">
+                <img src="https://image.tmdb.org/t/p/original/yFXMNfyuQpbvoHibtDakK17DHW4.jpg" alt="Angry Birds: La Película">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieAngryBirds2')">
+                <img src="https://image.tmdb.org/t/p/original/ebe8hJRCwdflNQbUjRrfmqtUiNi.jpg" alt="Angry Birds 2: La Película">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA La vida secreta de tus mascotas -->
+<div id="modalVidaSecretaMascotasSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalVidaSecretaMascotasSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieVidaSecretaMascotas2016')">
+                <img src="https://image.tmdb.org/t/p/original/g3Hms6AE174doeGR1gz5zX5sVsv.jpg" alt="La vida secreta de tus mascotas">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieVidaSecretaMascotas2')">
+                <img src="https://image.tmdb.org/t/p/original/q3mKnSkzp1doIsCye6ap4KIUAbu.jpg" alt="La vida secreta de tus mascotas 2">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Rompe Ralph -->
+<div id="modalRompeRalphSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalRompeRalphSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieRompeRalph2012')">
+                <img src="https://image.tmdb.org/t/p/original/lTpE4JQ2C09NicqvDhwi70IRz62.jpg" alt="¡Rompe Ralph!">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieRalphRompeInternet2018')">
+                <img src="https://image.tmdb.org/t/p/original/wfff5XoLdGQzCt2Nb4ZF6WYNLAq.jpg" alt="Ralph Rompe Internet">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Cars -->
+<div id="modalCarsSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalCarsSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieCars2006')">
+                <img src="https://image.tmdb.org/t/p/original/2wXSGdilzINqZ0ZNBaWTVGQnL5.jpg" alt="Cars">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieCars22011')">
+                <img src="https://image.tmdb.org/t/p/original/ddnwokQ1ybe0vEErT2RdReZjByk.jpg" alt="Cars 2">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieCars32017')">
+                <img src="https://image.tmdb.org/t/p/original/59vqR85OzlPm5EYGVK25vnvwBbf.jpg" alt="Cars 3">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Buscando a Nemo -->
+<div id="modalFindingNemoSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalFindingNemoSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieFindingNemo2003')">
+                <img src="https://image.tmdb.org/t/p/original/adMZmqi7LlZB3I8BIE6MpPdzOlG.jpg" alt="Buscando a Nemo">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieFindingDory2016')">
+                <img src="https://image.tmdb.org/t/p/original/yFjVlsJmEMacU0BNUwdGZlo2ixq.jpg" alt="Buscando a Dory">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Mi Villano Favorito -->
+<div id="modalDespicableMeSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalDespicableMeSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieDespicableMe2010')">
+                <img src="https://image.tmdb.org/t/p/original/9lOloREsAhBu0pEtU0BgeR1rHyo.jpg" alt="Mi Villano Favorito">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieDespicableMe22013')">
+                <img src="https://image.tmdb.org/t/p/original/5Fh4NdoEnCjCK9wLjdJ9DJNFl2b.jpg" alt="Mi Villano Favorito 2">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieDespicableMe32017')">
+                <img src="https://image.tmdb.org/t/p/original/5qcUGqWoWhEsoQwNUrtf3y3fcWn.jpg" alt="Mi Villano Favorito 3">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieDespicableMe42024')">
+                <img src="https://image.tmdb.org/t/p/original/wWba3TaojhK7NdycRhoQpsG0FaH.jpg" alt="Mi Villano Favorito 4">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Trolls -->
+<div id="modalTrollsSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalTrollsSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieTrolls2016')">
+                <img src="https://image.tmdb.org/t/p/original/grCBNLzAGbRrGMzF4eTM9EXwP78.jpg" alt="Trolls">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieTrollsWorldTour2020')">
+                <img src="https://image.tmdb.org/t/p/original/7W0G3YECgDAfnuiHG91r8WqgIOe.jpg" alt="Trolls 2: Gira Mundial">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieTrollsBandTogether2023')">
+                <img src="https://image.tmdb.org/t/p/original/bkpPTZUdq31UGDovmszsg2CchiI.jpg" alt="Trolls 3: Todos Juntos">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Los Increíbles -->
+<div id="modalLosIncreiblesSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalLosIncreiblesSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieLosIncreibles2004')">
+                <img src="https://image.tmdb.org/t/p/original/2LqaLgk4Z226KkgPJuiOQ58wvrm.jpg" alt="Los Increíbles">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieLosIncreibles22018')">
+                <img src="https://image.tmdb.org/t/p/original/9lFKBtaVIhP7E2Pk0IY1CwTKTMZ.jpg" alt="Los Increíbles 2">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA La LEGO película -->
+<div id="modalLaLegoPeliculaSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalLaLegoPeliculaSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieLaLegoPelicula2014')">
+                <img src="https://image.tmdb.org/t/p/original/9klB7qKC9aCeGyyM4uU5hSA6xDV.jpg" alt="La LEGO película">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieLaLegoPelicula22019')">
+                <img src="https://image.tmdb.org/t/p/original/ymHghL9iS7X0QpSDqp7jhiEDVFh.jpg" alt="La LEGO película 2">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Los Croods -->
+<div id="modalLosCroodsSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalLosCroodsSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieLosCroods2013')">
+                <img src="https://image.tmdb.org/t/p/original/jF3VbDwCfzxKwKrT9rpuP9xoAdH.jpg" alt="Los Croods">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieLosCroodsUnaNuevaEra2020')">
+                <img src="https://image.tmdb.org/t/p/original/tbVZ3Sq88dZaCANlUcewQuHQOaE.jpg" alt="Los Croods: Una nueva era">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de la SAGA Aviones -->
+<div id="modalAvionesSaga" class="modal">
+    <div class="modal-content-saga">
+        <span class="close" onclick="closeModal('modalAvionesSaga')">&times;</span>
+        <div class="grid">
+            <div class="movie" onclick="openMovieModal('movieAviones2013')">
+                <img src="https://image.tmdb.org/t/p/original/i2xgU0y0p77WTrB0oIkbpdaWq8R.jpg" alt="Aviones">
+                <h3></h3>
+            </div>
+            <div class="movie" onclick="openMovieModal('movieAvionesRescate2014')">
+                <img src="https://image.tmdb.org/t/p/original/45O4UJlf4W1VMVV76SISFN6JGZw.jpg" alt="Aviones: Equipo de Rescate">
+                <h3></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- AQUI VAN LOS MODALES DE LAS SAGAS -->
+
+<!-- AQUI ESTA LA SAGA DE "INTENSAMENTE" -->
+
+<!-- INTENSAMENTE -->
+
+<!-- Modal de Intensamente -->
+<div id="movieInsideOut2015" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieInsideOut2015')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg" alt="Intensamente">
+        <h3>INTENSAMENTE</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2015</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia, Aventura, Drama, Comedia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 34 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Riley es una chica que disfruta o padece toda clase de sentimientos. Aunque su vida ha estado marcada por la Alegría, también se ve afectada por otro tipo de emociones. Lo que Riley no entiende muy bien es por qué motivo tiene que existir la Tristeza en su vida. Una serie de acontecimientos hacen que Alegría y Tristeza se mezclen en una peligrosa aventura que dará un vuelco al mundo de Riley.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9obHN3aXNoLmNvbS9lL21vb2hscHJmaXI5Zg==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- INTENSAMENTE 2 -->
+
+<!-- Modal de Intensamente 2 -->
+<div id="movieInsideOut2" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieInsideOut2')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg" alt="Intensamente 2">
+        <h3>INTENSAMENTE 2</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2024</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Aventura, Comedia, Drama, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 36 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Riley entra en la adolescencia y el Cuartel General de su cabeza sufre una repentina reforma para hacerle hueco a algo totalmente inesperado propio de la pubertad: ¡nuevas emociones! Alegría, Tristeza, Ira, Miedo y Asco, con años de impecable gestión a sus espaldas (según ellos...) no saben muy bien qué sentir cuando aparece con enorme ímpetu Ansiedad. Y no viene sola: le acompañan envidia, vergüenza y aburrimiento. Secuela de 'Inside Out'.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lL3RxeHNoM2oxbzQ0ag==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "ANGRY BIRDS" -->
+
+<!-- ANGRY BIRDS: LA PELÍCULA -->
+
+<!-- Modal de Angry Birds: La Película -->
+<div id="movieAngryBirds2016" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieAngryBirds2016')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/yFXMNfyuQpbvoHibtDakK17DHW4.jpg" alt="Angry Birds: La Película">
+        <h3>ANGRY BIRDS: LA PELÍCULA</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2016</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Aventura, Comedia, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 23 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Basada en la saga de videojuegos (Angry Birds), la historia se desarrolla en una isla poblada enteramente por aves felices que no vuelan... o casi enteramente. En este paraíso, Red, un pájaro con problemas de mal genio, el veloz Chuck y el volátil Bomb nunca han terminado de encajar. Pero, cuando la isla recibe la visita de unos misteriosos cerdos verdes, tendrán que ser estos insólitos marginados los que descubran qué traman esos cerdos.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lL3Q2YmVyem1kamFkMw==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- ANGRY BIRDS 2: LA PELÍCULA -->
+
+<!-- Modal de Angry Birds 2: La Película -->
+<div id="movieAngryBirds2" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieAngryBirds2')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/ebe8hJRCwdflNQbUjRrfmqtUiNi.jpg" alt="Angry Birds 2: La Película">
+        <h3>ANGRY BIRDS 2: LA PELÍCULA</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2019</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Acción, Fantasía, Aventura, Comedia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 36 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Vuelven a la carga Red, el pájaro de color rojo con problemas de mal genio, y sus amigos Chuck, el pájaro amarillo hiperactivo, y Bomb, el pájaro negro muy volátil. En esta segunda parte, los pájaros protagonistas y los intrigantes cerdos de color verde llevarán su conflicto a un nuevo nivel. Y es que, aparecerá una nueva y malvada villana: Zeta, un pájaro que vive en una isla helada. Cuando Zeta lance una bola de hielo sobre la isla en la que se encuentran Red y compañía, nuestros protagonistas tendrán que hacer frente a esta nueva amenaza.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lLzVveThxaHd1emMzZw==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "LA VIDA SECRETA DE TUS MASCOTAS" -->
+
+<!-- LA VIDA SECRETA DE TUS MASCOTAS -->
+
+<!-- Modal de La vida secreta de tus mascotas -->
+<div id="movieVidaSecretaMascotas2016" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieVidaSecretaMascotas2016')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/g3Hms6AE174doeGR1gz5zX5sVsv.jpg" alt="La vida secreta de tus mascotas">
+        <h3>LA VIDA SECRETA DE TUS MASCOTAS</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2016</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Aventura, Comedia, Animación, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 26 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Comedia acerca de la vida que llevan nuestras mascotas cuando cerramos la puerta detrás de nosotros camino del trabajo o del colegio.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lL3E2aDkzNGh4MGtmbw==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- LA VIDA SECRETA DE TUS MASCOTAS 2 -->
+
+<!-- Modal de La vida secreta de tus mascotas 2 -->
+<div id="movieVidaSecretaMascotas2" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieVidaSecretaMascotas2')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/q3mKnSkzp1doIsCye6ap4KIUAbu.jpg" alt="La vida secreta de tus mascotas 2">
+        <h3>LA VIDA SECRETA DE TUS MASCOTAS 2</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2019</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Aventura, Animación, Comedia, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 26 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Los perros Duque y Max se acostumbran al nuevo miembro de la familia y a la vida en el campo mientras sus amigos sortean varias crisis en la ciudad.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lL2lvNnZxOWFpMGhoZA==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "¡ROMPE RALPH!" -->
+
+<!-- ¡ROMPE RALPH! -->
+
+<!-- Modal de ¡Rompe Ralph! -->
+<div id="movieRompeRalph2012" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieRompeRalph2012')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/lTpE4JQ2C09NicqvDhwi70IRz62.jpg" alt="¡Rompe Ralph!">
+        <h3>¡ROMPE RALPH!</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2012</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Familia, Animación, Comedia, Aventura</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 41 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Durante décadas, Ralph ha vivido a la sombra de Repara-Félix Jr., el chico bueno de su videojuego. Cansado de ser el malo de la historia, Ralph decide tomar el asunto por sus propias y gigantes manos, y se lanza en un viaje a través de los distintos mundos y generaciones de videojuegos para demostrarle al mundo que él también puede ser un héroe.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lLzhtM3FzMXZxeXNtbg==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- WIFI RALPH -->
+
+<!-- Modal de Ralph Rompe Internet -->
+<div id="movieRalphRompeInternet2018" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieRalphRompeInternet2018')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/wfff5XoLdGQzCt2Nb4ZF6WYNLAq.jpg" alt="Ralph Rompe Internet">
+        <h3>RALPH ROMPE INTERNET</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2018</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Familia, Animación, Comedia, Aventura</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 52 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Ralph sale de los recreativos y... ¡rompe Internet! ¿Qué podría salir mal? La secuela de *¡Rompe Ralph!* (2012) tendrá lugar en el presente, seis años después de los acontecimientos de la primera película. En ella volveremos a ver a Ralph, el malo del videojuego que quiere ser un héroe, además de otros personajes ya conocidos, como Vanellope von Schweetz, la chica *error de programación* con un imparable espíritu ganador. La historia se centrará en las aventuras de Ralph y sus compañeros en el mundo de Internet.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lLzg0a3dndzNyanV1ZA==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "CARS" -->
+
+<!-- CARS -->
+
+<!-- Modal de Cars -->
+<div id="movieCars2006" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieCars2006')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/2wXSGdilzINqZ0ZNBaWTVGQnL5.jpg" alt="Cars">
+        <h3>CARS</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2006</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Aventura, Comedia, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 56 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> El aspirante a campeón de carreras Rayo McQueen está sobre la vía rápida al éxito, la fama y todo lo que él había soñado, hasta que por error toma un desvío inesperado en la polvorienta y solitaria Ruta 66. Su actitud arrogante se desvanece cuando llega a una pequeña comunidad olvidada que le enseña las cosas importantes de la vida que había olvidado.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lLzZwejJjbzI1azZkcA==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- CARS 2 -->
+
+<!-- Modal de Cars 2 -->
+<div id="movieCars22011" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieCars22011')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/ddnwokQ1ybe0vEErT2RdReZjByk.jpg" alt="Cars 2">
+        <h3>CARS 2</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2011</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia, Aventura, Comedia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 47 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Cuando Rayo McQueen y Mate compiten en el Gran Premio Mundial, la carretera se llena de divertidas sorpresas... especialmente cuando Mate se ve atrapado en una aventura de espionaje internacional.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lL3k0bTdld2xuNXBhag==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- CARS 3 -->
+
+<!-- Modal de Cars 3 -->
+<div id="movieCars32017" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieCars32017')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/59vqR85OzlPm5EYGVK25vnvwBbf.jpg" alt="Cars 3">
+        <h3>CARS 3</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2017</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Familia, Animación, Aventura, Comedia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 42 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Rayo McQueen sigue siendo el mejor coche de carreras del mundo, pero ahora que es uno de los más veteranos del circuito, debe demostrar a todo el mundo que aún puede ganar una gran carrera y que no necesita jubilarse. En esta ocasión, el famoso bólido de carreras tendrá que enfrentarse a una nueva generación de corredores más jóvenes, potentes y veloces, que amenaza con cambiar el deporte de su vida. Entre ellos está el competitivo y revolucionario Jackson Storm, que no se lo pondrá nada fácil.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lL3VsdnBub3o5MWtzZg==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "BUSCANDO A NEMO" -->
+
+<!-- BUSCANDO A NEMO -->
+
+<!-- Modal de Buscando a Nemo -->
+<div id="movieFindingNemo2003" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieFindingNemo2003')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/adMZmqi7LlZB3I8BIE6MpPdzOlG.jpg" alt="Buscando a Nemo">
+        <h3>BUSCANDO A NEMO</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2003</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 40 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Nemo, un pececillo, hijo único muy querido y protegido por su padre, ha sido capturado en un arrecife australiano y ahora vive en una pecera en la oficina de un dentista de Sidney. El tímido padre de Nemo se embarcará en una peligrosa aventura para rescatar a su hijo. Pero Nemo y sus nuevos amigos tienen también un astuto plan para escapar de la pecera y volver al mar.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lLzBicGJmdnY1dWdzMg==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- BUSCANDO A DORY -->
+
+<!-- Modal de Buscando a Dory -->
+<div id="movieFindingDory2016" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieFindingDory2016')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/yFjVlsJmEMacU0BNUwdGZlo2ixq.jpg" alt="Buscando a Dory">
+        <h3>BUSCANDO A DORY</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2016</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Aventura, Animación, Comedia, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 37 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Un año después de los acontecimientos narrados en *Buscando a Nemo*, Dory vive apaciblemente con Marlin y su hijo Nemo. Pero durante un viaje para ver cómo las mantarrayas migran de vuelta a casa, los problemas de memoria de Dory parecen desaparecer durante un segundo: recuerda que tiene una familia e inmediatamente decide emprender viaje para reencontrarse con sus padres, a los que perdió hace años.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9wbGF5ZXJ3aXNoLmNvbS9lL2x3NzlqejJjcWk5Yg==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "MI VILLANO FAVORITO" -->
+
+<!-- MI VILLANO FAVORITO -->
+
+<!-- Modal de Mi Villano Favorito -->
+<div id="movieDespicableMe2010" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieDespicableMe2010')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/9lOloREsAhBu0pEtU0BgeR1rHyo.jpg" alt="Mi Villano Favorito">
+        <h3>MI VILLANO FAVORITO</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2010</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia, Comedia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 34 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> En una alegre urbanización con cuidados jardines rodeados por verjas de madera pintadas de blanco y llenos de rosales, sobresale una casa negra con el césped amarillento. Los vecinos ignoran que debajo de la vivienda hay un enorme escondite secreto. Allí está Gru, rodeado por un pequeño ejército de lacayos, planeando el mayor robo de toda la historia. ¡Va a hacerse con la luna!</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9obHN3aXNoLmNvbS9lL2o2ZWhobnZ5OW9xdg==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- MI VILLANO FAVORITO 2 -->
+
+<!-- Modal de Mi Villano Favorito 2 -->
+<div id="movieDespicableMe22013" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieDespicableMe22013')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/5Fh4NdoEnCjCK9wLjdJ9DJNFl2b.jpg" alt="Mi Villano Favorito 2">
+        <h3>MI VILLANO FAVORITO 2</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2013</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Comedia, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 38 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> La película de animación de los estudios Universal, giraba en torno a una apacible y colorida población en la que vivía el malvado Gru. Ayudado por su batallón de Minions, unos pequeños seres de color amarillo, intentaron robar la Luna, aunque no todo acabó como esperaban. Tres niñas curiosas y algo traviesas se cruzaron en su camino, entorpeciéndole todos sus planes y conviertiendo su objetivo en una alocada hazaña interestelar. Ahora, *Gru, mi villano favorito 2*, narra una nueva aventura en la que Gru volverá a estar acompañado de simpáticos humanoides.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9obHN3aXNoLmNvbS9lL2Jmejhnc3B4Z3E1Mg==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- MI VILLANO FAVORITO 3 -->
+
+<!-- Modal de Mi Villano Favorito 3 -->
+<div id="movieDespicableMe32017" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieDespicableMe32017')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/5qcUGqWoWhEsoQwNUrtf3y3fcWn.jpg" alt="Mi Villano Favorito 3">
+        <h3>MI VILLANO FAVORITO 3</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2017</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Acción, Animación, Comedia, Familia, Aventura</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 29 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> A Gru lo han despedido. Se ha quedado sin trabajo porque ha dejado escapar al supervillano Balthazar Bratt, estrella infantil de los años 80 que con la llegada de la pubertad lo perdió todo y ha estado creando el caos en todo el planeta. Además, Gru va a conocer a su hermano gemelo Dru y tendrá que decidir si está listo para continuar la tradición familiar de dedicarse al crimen, y unirse a el para llevar a cabo un último golpe. Aunque ha dejado esa vida atrás… ¿volverá a convertirse Gru en un villano?</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9obHN3aXNoLmNvbS9lL2dqMjE2aDVrMmQ2aA==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- MI VILLANO FAVORITO 4 -->
+
+<!-- Modal de MiVillano Favorito 4 -->
+<div id="movieDespicableMe42024" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieDespicableMe42024')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/wWba3TaojhK7NdycRhoQpsG0FaH.jpg" alt="Mi Villano Favorito 4">
+        <h3>MI VILLANO FAVORITO 4</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2024</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia, Comedia, Acción</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 34 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Gru, Lucy y las niñas -Margo, Edith y Agnes- dan la bienvenida a un nuevo miembro en la familia: Gru Junior, que parece llegar con el propósito de ser un suplicio para su padre. Gru tendrá que enfrentarse en esta ocasión a su nueva némesis Maxime Le Mal y su sofisticada y malévola novia Valentina, lo que obligará a la familia a tener que darse a la fuga. Cuarta entrega de *Gru, mi villano favorito*.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9obHN3aXNoLmNvbS9lLzNoenI4ZHQ0dHpqeQ==" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "TROLLS" -->
+
+<!-- TROLLS -->
+
+<!-- Modal de Trolls -->
+<div id="movieTrolls2016" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieTrolls2016')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/grCBNLzAGbRrGMzF4eTM9EXwP78.jpg" alt="Trolls">
+        <h3>TROLLS</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2016</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Familia, Animación, Fantasía, Aventura, Comedia, Música</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 32 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Conocidos por sus pelos de colores, locos y mágicos, los Trolls son las criaturas más felices y alegres que irrumpen en el mundo de la canción. Pero su mundo de arco iris y cupcakes cambiará para siempre cuando su líder Poppy debe embarcarse en una misión de rescate que la llevará muy lejos del único mundo que siempre ha conocido.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS8zenV5cXhjNGF2bHg=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- TROLLS 2: GIRA MUNDIAL -->
+
+<!-- Modal de Trolls 2: Gira Mundial -->
+<div id="movieTrollsWorldTour2020" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieTrollsWorldTour2020')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/7W0G3YECgDAfnuiHG91r8WqgIOe.jpg" alt="Trolls 2: Gira Mundial">
+        <h3>TROLLS 2: GIRA MUNDIAL</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2020</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Familia, Animación, Comedia, Fantasía, Aventura, Música</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 30 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> En una aventura que les llevará más allá de todo lo que habían conocido, Poppy y Branch descubren que su tribu de Trolls es solo una de las seis que existen, que el resto están repartidas en seis reinos y consagradas a seis tipos distintos de música: funk, country, tecno, clásica, pop y rock. La reina Bárbara, miembro de la realeza del hard rock, y su padre, el Rey Metal, quieren acabar con el resto de géneros musicales e imponer el reinado del rock. Con el destino del mundo en juego, Poppy y Branch, junto con el resto de la pandilla — Grandullón, Chanelle, Satén, Cooper y Guy Diamante—, visitarán los demás reinos para unir a los Trolls contra los planes de Barb de eclipsarlos a todos.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS85eTVncTBlM2Q2MW4=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- TROLLS 3: TODOS JUNTOS -->
+
+<!-- Modal de Trolls 3: Todos Juntos -->
+<div id="movieTrollsBandTogether2023" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieTrollsBandTogether2023')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/bkpPTZUdq31UGDovmszsg2CchiI.jpg" alt="Trolls 3: Todos Juntos">
+        <h3>TROLLS 3: TODOS JUNTOS</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2023</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia, Música, Fantasía, Comedia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 31 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Cuando Floyd, uno de los hermanos de Branch, es secuestrado por una pareja de maléficas estrellas del pop para aprovecharse de su talento musical, Branch y Poppy tendrán que embarcarse en un viaje tan aterrador como emotivo para reunir a la familia y rescatar a Floyd de un destino aún peor que el desolador olvido de los fans.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS80eWV5NTJibjM0eGI=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "LOS INCREÍBLES" -->
+
+<!-- LOS INCREÍBLES -->
+
+<!-- Modal de Los Increíbles -->
+<div id="movieLosIncreibles2004" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieLosIncreibles2004')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/2LqaLgk4Z226KkgPJuiOQ58wvrm.jpg" alt="Los Increíbles">
+        <h3>LOS INCREÍBLES</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2004</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Acción, Aventura, Animación, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 55 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Como Mr. Increíble y Elastigirl, Bob y su esposa Helen estaban entre los mejores luchadores contra el crimen. Por fin pueden volver a la acción cuando una misteriosa llamada cita a Bob en una isla remota.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS81aGF4M2t1N2N6M3g=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- LOS INCREÍBLES 2 -->
+
+<!-- Modal de Los Increíbles 2 -->
+<div id="movieLosIncreibles22018" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieLosIncreibles22018')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/9lFKBtaVIhP7E2Pk0IY1CwTKTMZ.jpg" alt="Los Increíbles 2">
+        <h3>LOS INCREÍBLES 2</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2018</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Acción, Aventura, Animación, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 57 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Helen tiene que liderar una campaña para que los superhéroes regresen, mientras Bob vive su vida 'normal' con Violet, Dash y el bebé Jack-Jack —cuyos superpoderes descubriremos—. Su misión se va a pique cuando aparece un nuevo villano con un brillante plan que lo amenaza todo. Pero los Parr no se amedrentarán y menos teniendo a Frozone de su parte.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS9zZ2NlbHEzbnNlZmE=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "LA LEGO PELÍCULA" -->
+
+<!-- LA LEGO PELÍCULA -->
+
+<!-- Modal de La LEGO película -->
+<div id="movieLaLegoPelicula2014" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieLaLegoPelicula2014')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/9klB7qKC9aCeGyyM4uU5hSA6xDV.jpg" alt="La LEGO película">
+        <h3>LA LEGO PELÍCULA</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2014</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia, Aventura, Comedia, Fantasía</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 40 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Película basada en los clásicos juguetes LEGO. Emmet, el protagonista de la película, trabaja como constructor en la ciudad Lego, pero sus conocimientos de construcción no van más allá de colocar las fichas atendiendo pormenorizadamente las instrucciones de edificación. Sin embargo, sin saber cómo ni por qué, Emmet es confundido con un 'MasterBuilder' e introducido como cabecilla de una misión que tiene por objetivo evitar que un malvado acabe con la ciudad de bloques. Por suerte, los habitantes de tan atípico lugar no están solos. Los mismísimos Superman y Batman han tomado la forma de muñecos Lego para tomar parte de esta gran aventura.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS94Z25xZGpjMHBheDY=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- LA LEGO PELÍCULA 2 -->
+
+<!-- La LEGO película 2 (2019) -->
+<div id="movieLaLegoPelicula22019" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieLaLegoPelicula22019')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/ymHghL9iS7X0QpSDqp7jhiEDVFh.jpg" alt="La LEGO película 2">
+        <h3>LA LEGO PELÍCULA 2</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2019</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Acción, Aventura, Animación, Comedia, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 47 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Han pasado cinco años desde que todo era fabuloso y los ciudadanos se enfrentan a una gran nueva amenaza: los invasores LEGO DUPLO® del espacio exterior, destruyendo todo más rápido de lo que pueden reconstruir.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS90NWt5NjYwNjMxcXQ=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "LOS CROODS" -->
+
+<!-- LOS CROODS -->
+
+<!-- Modal de Los Croods -->
+<div id="movieLosCroods2013" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieLosCroods2013')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/jF3VbDwCfzxKwKrT9rpuP9xoAdH.jpg" alt="Los Croods">
+        <h3>LOS CROODS</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2013</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Aventura, Familia, Fantasía, Comedia, Acción</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 38 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> La película está ambientada en la prehistoria, donde Crug lidera a su familia más allá de la comodidad de su hogar después de que este sea destruido por un gran terremoto. Mientras intentan viajar por el desconocido y aterrador mundo, se encuentran con un nómada que cautiva a su clan, en especial a su hermana mayor, con su mente moderna.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS9kc251dm9xbTlocXc=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- LOS CROODS: UNA NUEVA ERA -->
+
+<!-- Modal de Los Croods: Una nueva era -->
+<div id="movieLosCroodsUnaNuevaEra2020" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieLosCroodsUnaNuevaEra2020')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/tbVZ3Sq88dZaCANlUcewQuHQOaE.jpg" alt="Los Croods: Una nueva era">
+        <h3>LOS CROODS: UNA NUEVA ERA</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2020</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia, Aventura, Fantasía, Comedia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 35 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Después de salir de su cueva, los Croods se encuentran con su mayor amenaza desde que se fueron: otra familia llamada Betterman, quienes afirman y demuestran ser mejores y evolucionados. Grug empieza a sospechar de los padres de Betterman, Phil y Hope, ya que planean en secreto separar a su hija Eep con su amado novio Guy para asegurarse de que su hija Dawn tenga un compañero amoroso e inteligente que la proteja.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS94OG85YWk0MHc0dzg=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AQUI ESTA LA SAGA DE "AVIONES" -->
+
+<!-- AVIONES -->
+
+<!-- Aviones (2013) -->
+<div id="movieAviones2013" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieAviones2013')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/i2xgU0y0p77WTrB0oIkbpdaWq8R.jpg" alt="Aviones">
+        <h3>AVIONES</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2013</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Familia, Aventura, Comedia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 31 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong> Película derivada de la exitosa de Disney/Pixar dirigida por John Lasseter, Cars. En esta ocasión no son coches sino aviones, los que van a sumergirse en una divertida historia de acción y aventuras. El protagonista, un avión llamado Dusty Crophopper, tiene verdadero terror a las alturas. Pero desafiará sus miedos para poder cumplir uno de sus grandes deseos: poder correr en la carrera más grandiosa que exiten en todo el mundo. Dusty sabe que este será el mayor reto de su vida, pero también será la experiencia más apasionante y sobrecogedora que va a vivir jamás.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS9zbjMzcDdwenl5YXc=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+<!-- AVIONES: EQUIPO DE RESCATE -->
+
+<!-- Aviones: Equipo de Rescate (2014) -->
+<div id="movieAvionesRescate2014" class="modal">
+    <div class="modal-content-movie">
+        <span class="close" onclick="closeModal('movieAvionesRescate2014')">&times;</span>
+        <img src="https://image.tmdb.org/t/p/original/45O4UJlf4W1VMVV76SISFN6JGZw.jpg" alt="Aviones: Equipo de Rescate">
+        <h3>AVIONES: EQUIPO DE RESCATE</h3>
+        <p><i class="fas fa-calendar"></i> <strong>Año:</strong> 2014</p>
+        <p><i class="fas fa-film"></i> <strong>Género:</strong> Animación, Comedia, Aventura, Familia</p>
+        <p><i class="fas fa-clock"></i> <strong>Duración:</strong> 1h 23 mins</p>
+        <p><i class="fas fa-book"></i> <strong>Sinopsis:</strong>  *Aviones: Equipo de rescate* sigue a una peculiar pandilla de aviones bombero de élite cuyo principal cometido es proteger el histórico Parque Nacional de Piston Peak de un atroz incendio. El popular avión de carreras Dusty descubre que su motor está estropeado, lo que le impide volver a competir. A pesar de la terrible noticia no se desanima y decide utilizar su experiencia para unirse al equipo anti incendios.</p>
+        <a href="https://vpn-movie-ofc.blogspot.com/2024/05/embed_27.html?r=aHR0cHM6Ly9zd2lzaHNydi5jb20vZS8wNXc1ZGFoaHh3anY=" class="button" target="_blank">VER PELÍCULA</a>
+    </div>
+</div>
+
+
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    function openMovieModal(movieId) {
+        document.getElementById(movieId).style.display = "block";
+    }
+</script>
+
+</body>
+</html>
